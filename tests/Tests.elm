@@ -125,6 +125,13 @@ suite =
                                     takeCommands [ Forward ] (Rover South <| Pos 0 0)
                             in
                                 Expect.equal rover (Rover South <| Pos 0 -1)
+                    , test "twice, moves to (0,-2)" <|
+                        \_ ->
+                            let
+                                rover =
+                                    takeCommands [ Forward, Forward ] (Rover South <| Pos 0 0)
+                            in
+                                Expect.equal rover (Rover South <| Pos 0 -2)
                     ]
                 ]
             ]
