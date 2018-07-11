@@ -150,6 +150,22 @@ suite =
                                 Expect.equal rover (Rover West <| Pos -2 0)
                     ]
                 ]
+            , describe "applying backward"
+                [ test "once, moves to (0,-1)" <|
+                    \_ ->
+                        let
+                            rover =
+                                takeCommands [ Backward ] initialRover
+                        in
+                            Expect.equal rover (Rover North <| Pos 0 -1)
+                , test "twice, moves to (0,-22)" <|
+                    \_ ->
+                        let
+                            rover =
+                                takeCommands [ Backward, Backward ] initialRover
+                        in
+                            Expect.equal rover (Rover North <| Pos 0 -2)
+                ]
             , describe "various commands"
                 [ test "left forward forward left forward" <|
                     \_ ->
