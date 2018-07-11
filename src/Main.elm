@@ -47,13 +47,13 @@ moveForward rover =
             moveY up rover.position
 
         East ->
-            moveX rover.position
+            moveX up rover.position
 
         South ->
             moveY down rover.position
 
-        _ ->
-            rover.position
+        West ->
+            moveX down rover.position
 
 
 up =
@@ -68,8 +68,8 @@ moveY dir pos =
     { pos | y = pos.y + (dir 1) }
 
 
-moveX pos =
-    { pos | x = pos.x + 1 }
+moveX dir pos =
+    { pos | x = pos.x + (dir 1) }
 
 
 type Direction
