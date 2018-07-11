@@ -9,13 +9,30 @@ import Main exposing (..)
 
 suite : Test
 suite =
-    describe "Main"
-        [ describe "initial model"
-            [ test "returns hello" <|
+    describe "Rover"
+        [ describe "initial rover"
+            [ test "faces north" <|
                 \_ ->
-                    Expect.equal model.welcomeText "hello"
+                    Expect.equal initialRover.direction North
             ]
         ]
+
+
+initialRover : Rover
+initialRover =
+    Rover North
+
+
+type alias Rover =
+    { direction : Direction
+    }
+
+
+type Direction
+    = North
+    | East
+    | South
+    | West
 
 
 
