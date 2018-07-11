@@ -44,17 +44,28 @@ moveForward : Rover -> Pos
 moveForward rover =
     case rover.direction of
         North ->
-            moveY rover.position
+            moveY up rover.position
 
         East ->
             moveX rover.position
+
+        South ->
+            moveY down rover.position
 
         _ ->
             rover.position
 
 
-moveY pos =
-    { pos | y = pos.y + 1 }
+up =
+    (\i -> i)
+
+
+down =
+    (\i -> i * -1)
+
+
+moveY dir pos =
+    { pos | y = pos.y + (dir 1) }
 
 
 moveX pos =
