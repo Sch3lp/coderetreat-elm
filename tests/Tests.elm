@@ -14,17 +14,21 @@ suite =
             [ test "faces north" <|
                 \_ ->
                     Expect.equal initialRover.direction North
+            , test "is positioned at (0,0)" <|
+                \_ ->
+                    Expect.equal initialRover.position <| Pos 0 0
             ]
         ]
 
 
 initialRover : Rover
 initialRover =
-    Rover North
+    Rover North <| Pos 0 0
 
 
 type alias Rover =
     { direction : Direction
+    , position : Pos
     }
 
 
@@ -33,6 +37,10 @@ type Direction
     | East
     | South
     | West
+
+
+type alias Pos =
+    { x : Int, y : Int }
 
 
 
