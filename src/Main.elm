@@ -1,36 +1,83 @@
 module Main exposing (..)
 
-import Html exposing (Html)
+
+initialRover : Rover
+initialRover =
+    Rover North <| Pos 0 0
 
 
-type alias Model =
-    { welcomeText : String }
+takeCommand : Command -> Rover -> Rover
+takeCommand cmd rover =
+    case cmd of
+        Left ->
+            let
+                newDirection =
+                    turnLeft rover.direction
+            in
+                { rover | direction = newDirection }
+
+        Right ->
+            let
+                newDirection =
+                    turnRight rover.direction
+            in
+                { rover | direction = newDirection }
 
 
-model : Model
-model =
-    { welcomeText = "hello" }
+takeCommands : List Command -> Rover -> Rover
+takeCommands cmds rover =
+    List.foldl takeCommand rover cmds
 
 
-type Msg
-    = Noop
+type Command
+    = Left
+    | Right
 
 
-update : Msg -> Model -> ( Model, Cmd Msg )
-update msg model =
-    ( model, Cmd.none )
+type alias Rover =
+    { direction : Direction
+    , position : Pos
+    }
 
 
-view : Model -> Html Msg
-view model =
-    Html.h1 [] [ Html.text model.welcomeText ]
+type alias Pos =
+    { x : Int, y : Int }
 
 
-main : Program Never Model Msg
-main =
-    Html.program
-        { init = ( model, Cmd.none )
-        , update = update
-        , view = view
-        , subscriptions = \model -> Sub.none
-        }
+type Direction
+    = North
+    | East
+    | South
+    | West
+
+
+turnLeft : Direction -> Direction
+turnLeft dir =
+    case dir of
+        North ->
+            West
+
+        West ->
+            South
+
+        South ->
+            East
+
+        East ->
+            North
+
+
+turnRight : Direction -> Direction
+turnRight dir =
+    case dir of
+        North ->
+            East
+
+        East ->
+            South
+
+        South ->
+            West
+
+        West ->
+            North
