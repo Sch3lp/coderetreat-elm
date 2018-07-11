@@ -101,6 +101,15 @@ suite =
                                 takeCommands [ Forward, Forward ] initialRover
                         in
                             Expect.equal rover (Rover North <| Pos 0 2)
+                , describe "facing east"
+                    [ test "once, moves to (1,0)" <|
+                        \_ ->
+                            let
+                                rover =
+                                    takeCommands [ Forward ] (Rover East <| Pos 0 0)
+                            in
+                                Expect.equal rover (Rover East <| Pos 1 0)
+                    ]
                 ]
             ]
         ]

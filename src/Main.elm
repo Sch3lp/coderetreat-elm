@@ -43,12 +43,22 @@ type alias Pos =
 moveForward : Rover -> Pos
 moveForward rover =
     case rover.direction of
-        _ ->
+        North ->
             moveY rover.position
+
+        East ->
+            moveX rover.position
+
+        _ ->
+            rover.position
 
 
 moveY pos =
     { pos | y = pos.y + 1 }
+
+
+moveX pos =
+    { pos | x = pos.x + 1 }
 
 
 type Direction
