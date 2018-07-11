@@ -16,7 +16,7 @@ takeCommand cmd rover =
             { rover | direction = turnRight rover.direction }
 
         Forward ->
-            { rover | position = Pos 0 1 }
+            { rover | position = moveForward rover }
 
 
 takeCommands : List Command -> Rover -> Rover
@@ -38,6 +38,17 @@ type alias Rover =
 
 type alias Pos =
     { x : Int, y : Int }
+
+
+moveForward : Rover -> Pos
+moveForward rover =
+    case rover.direction of
+        _ ->
+            moveY rover.position
+
+
+moveY pos =
+    { pos | y = pos.y + 1 }
 
 
 type Direction

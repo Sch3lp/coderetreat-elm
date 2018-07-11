@@ -87,13 +87,20 @@ suite =
                             Expect.equal rover (Rover West <| Pos 0 0)
                 ]
             , describe "applying forward"
-                [ test "move to (0,1)" <|
+                [ test "once, moves to (0,1)" <|
                     \_ ->
                         let
                             rover =
                                 takeCommands [ Forward ] initialRover
                         in
                             Expect.equal rover (Rover North <| Pos 0 1)
+                , test "twice, moves to (0,2)" <|
+                    \_ ->
+                        let
+                            rover =
+                                takeCommands [ Forward, Forward ] initialRover
+                        in
+                            Expect.equal rover (Rover North <| Pos 0 2)
                 ]
             ]
         ]
