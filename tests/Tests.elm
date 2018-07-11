@@ -22,9 +22,16 @@ suite =
                     \_ ->
                         let
                             rover =
-                                takeCommand Left initialRover
+                                takeCommands [ Left ] initialRover
                         in
                             Expect.equal rover (Rover West <| Pos 0 0)
+                , test "twice, faces rover south without changing position" <|
+                    \_ ->
+                        let
+                            rover =
+                                takeCommands [ Left, Left ] initialRover
+                        in
+                            Expect.equal rover (Rover South <| Pos 0 0)
                 ]
             ]
         ]
@@ -37,7 +44,18 @@ initialRover =
 
 takeCommand : Command -> Rover -> Rover
 takeCommand cmd rover =
-    { rover | direction = West }
+    case cmd of
+        Left ->
+            let
+                newDirection =
+                    turnLeft rover.direction
+            in
+                { rover | direction = newDirection }
+
+
+takeCommands : List Command -> Rover -> Rover
+takeCommands cmds rover =
+    List.foldl takeCommand rover cmds
 
 
 type Command
@@ -50,6 +68,10 @@ type alias Rover =
     }
 
 
+type alias Pos =
+    { x : Int, y : Int }
+
+
 type Direction
     = North
     | East
@@ -57,8 +79,20 @@ type Direction
     | West
 
 
-type alias Pos =
-    { x : Int, y : Int }
+turnLeft : Direction -> Direction
+turnLeft dir =
+    case dir of
+        North ->
+            West
+
+        West ->
+            South
+
+        South ->
+            East
+
+        East ->
+            North
 
 
 
