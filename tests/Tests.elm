@@ -63,6 +63,29 @@ suite =
                         in
                             Expect.equal rover (Rover East <| Pos 0 0)
                 ]
+            , describe "applying right and left"
+                [ test "twice right, twice left, faces north again" <|
+                    \_ ->
+                        let
+                            rover =
+                                takeCommands [ Right, Right, Left, Left ] initialRover
+                        in
+                            Expect.equal rover (Rover North <| Pos 0 0)
+                , test "twice right, twice left alternating, faces north again" <|
+                    \_ ->
+                        let
+                            rover =
+                                takeCommands [ Right, Left, Right, Left ] initialRover
+                        in
+                            Expect.equal rover (Rover North <| Pos 0 0)
+                , test "right right right right left, faces west" <|
+                    \_ ->
+                        let
+                            rover =
+                                takeCommands [ Right, Right, Right, Right, Left ] initialRover
+                        in
+                            Expect.equal rover (Rover West <| Pos 0 0)
+                ]
             ]
         ]
 
