@@ -174,6 +174,13 @@ suite =
                                 takeCommands [ Left, Forward, Forward, Left, Forward ] initialRover
                         in
                             Expect.equal rover (Rover South <| Pos -2 -1)
+                , test "left forward backward right forward" <|
+                    \_ ->
+                        let
+                            rover =
+                                takeCommands [ Left, Forward, Backward, Right, Forward ] initialRover
+                        in
+                            Expect.equal rover (Rover North <| Pos 0 1)
                 ]
             ]
         ]
