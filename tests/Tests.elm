@@ -17,6 +17,15 @@ suite =
             , test "is positioned at (0,0)" <|
                 \_ ->
                     Expect.equal initialRover.position <| Pos 0 0
+            , describe "applying left"
+                [ test "once, faces rover west without changing position" <|
+                    \_ ->
+                        let
+                            rover =
+                                takeCommand Left initialRover
+                        in
+                            Expect.equal rover (Rover West <| Pos 0 0)
+                ]
             ]
         ]
 
@@ -24,6 +33,15 @@ suite =
 initialRover : Rover
 initialRover =
     Rover North <| Pos 0 0
+
+
+takeCommand : Command -> Rover -> Rover
+takeCommand cmd rover =
+    { rover | direction = West }
+
+
+type Command
+    = Left
 
 
 type alias Rover =
