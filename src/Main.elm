@@ -10,18 +10,10 @@ takeCommand : Command -> Rover -> Rover
 takeCommand cmd rover =
     case cmd of
         Left ->
-            let
-                newDirection =
-                    turnLeft rover.direction
-            in
-                { rover | direction = newDirection }
+            { rover | direction = turnLeft rover.direction }
 
         Right ->
-            let
-                newDirection =
-                    turnRight rover.direction
-            in
-                { rover | direction = newDirection }
+            { rover | direction = turnRight rover.direction }
 
 
 takeCommands : List Command -> Rover -> Rover
