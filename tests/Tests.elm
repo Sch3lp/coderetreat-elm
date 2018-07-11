@@ -32,6 +32,13 @@ suite =
                                 takeCommands [ Left, Left ] initialRover
                         in
                             Expect.equal rover (Rover South <| Pos 0 0)
+                , test "five times, faces rover west without changing position" <|
+                    \_ ->
+                        let
+                            rover =
+                                takeCommands [ Left, Left, Left, Left, Left ] initialRover
+                        in
+                            Expect.equal rover (Rover West <| Pos 0 0)
                 ]
             ]
         ]
