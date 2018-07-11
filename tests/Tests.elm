@@ -40,6 +40,29 @@ suite =
                         in
                             Expect.equal rover (Rover West <| Pos 0 0)
                 ]
+            , describe "applying right"
+                [ test "once, faces rover east without changing position" <|
+                    \_ ->
+                        let
+                            rover =
+                                takeCommands [ Right ] initialRover
+                        in
+                            Expect.equal rover (Rover East <| Pos 0 0)
+                , test "twice, faces rover south without changing position" <|
+                    \_ ->
+                        let
+                            rover =
+                                takeCommands [ Right, Right ] initialRover
+                        in
+                            Expect.equal rover (Rover South <| Pos 0 0)
+                , test "five times, faces rover east without changing position" <|
+                    \_ ->
+                        let
+                            rover =
+                                takeCommands [ Right, Right, Right, Right, Right ] initialRover
+                        in
+                            Expect.equal rover (Rover East <| Pos 0 0)
+                ]
             ]
         ]
 
@@ -59,6 +82,13 @@ takeCommand cmd rover =
             in
                 { rover | direction = newDirection }
 
+        Right ->
+            let
+                newDirection =
+                    turnRight rover.direction
+            in
+                { rover | direction = newDirection }
+
 
 takeCommands : List Command -> Rover -> Rover
 takeCommands cmds rover =
@@ -67,6 +97,7 @@ takeCommands cmds rover =
 
 type Command
     = Left
+    | Right
 
 
 type alias Rover =
@@ -99,6 +130,22 @@ turnLeft dir =
             East
 
         East ->
+            North
+
+
+turnRight : Direction -> Direction
+turnRight dir =
+    case dir of
+        North ->
+            East
+
+        East ->
+            South
+
+        South ->
+            West
+
+        West ->
             North
 
 
