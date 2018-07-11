@@ -15,6 +15,9 @@ takeCommand cmd rover =
         Right ->
             { rover | direction = turnRight rover.direction }
 
+        Forward ->
+            { rover | position = Pos 0 1 }
+
 
 takeCommands : List Command -> Rover -> Rover
 takeCommands cmds rover =
@@ -24,6 +27,7 @@ takeCommands cmds rover =
 type Command
     = Left
     | Right
+    | Forward
 
 
 type alias Rover =
