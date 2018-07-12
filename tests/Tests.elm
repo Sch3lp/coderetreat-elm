@@ -210,7 +210,7 @@ planet =
         , describe "moving out of bounds wraps to the other side"
             [ test "at (-1,-1) moving west results in (1,-1)" <|
                 \_ ->
-                    moveX down { pos = (Pos -1 -1), planet = moon }
+                    moveXAndWrap down { pos = (Pos -1 -1), planet = moon }
                         |> Expect.equal { pos = (Pos 1 -1), planet = moon }
             ]
         ]
@@ -220,7 +220,7 @@ type alias PlanetPos =
     { pos : Pos, planet : Planet }
 
 
-moveX dir planetPos =
+moveXAndWrap dir planetPos =
     let
         currentPos =
             planetPos.pos
