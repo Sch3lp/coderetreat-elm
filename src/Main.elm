@@ -1,6 +1,36 @@
 module Main exposing (..)
 
 
+type Command
+    = Left
+    | Right
+    | Forward
+    | Backward
+
+
+type alias Rover =
+    { direction : Direction
+    , position : Pos
+    }
+
+
+type alias Pos =
+    { x : Int, y : Int }
+
+
+type alias Planet =
+    { name : String
+    , size : Int
+    }
+
+
+type Direction
+    = North
+    | East
+    | South
+    | West
+
+
 initialRover : Rover
 initialRover =
     Rover North <| Pos 0 0
@@ -27,21 +57,28 @@ takeCommands cmds rover =
     List.foldl takeCommand rover cmds
 
 
-type Command
-    = Left
-    | Right
-    | Forward
-    | Backward
+edges : Planet -> List Pos
+edges p =
+    let
+        edge =
+            p.size // 2
 
+        inverse =
+            (\i -> i * -1)
 
-type alias Rover =
-    { direction : Direction
-    , position : Pos
-    }
+        edge1 =
+            Pos (inverse edge) (inverse edge)
 
+        edge2 =
+            Pos (edge) (edge)
 
-type alias Pos =
-    { x : Int, y : Int }
+        edge3 =
+            Pos (inverse edge) (edge)
+
+        edge4 =
+            Pos (edge) (inverse edge)
+    in
+        [ edge1, edge2, edge3, edge4 ]
 
 
 moveForward : Rover -> Pos
@@ -90,13 +127,6 @@ moveY dir pos =
 
 moveX dir pos =
     { pos | x = pos.x + (dir 1) }
-
-
-type Direction
-    = North
-    | East
-    | South
-    | West
 
 
 turnLeft : Direction -> Direction

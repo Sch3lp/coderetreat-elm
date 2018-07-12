@@ -202,36 +202,6 @@ mars =
         ]
 
 
-type alias Planet =
-    { name : String
-    , size : Int
-    }
-
-
-edges : Planet -> List Pos
-edges p =
-    let
-        edge =
-            p.size // 2
-
-        inverse =
-            (\i -> i * -1)
-
-        edge1 =
-            Pos (inverse edge) (inverse edge)
-
-        edge2 =
-            Pos (edge) (edge)
-
-        edge3 =
-            Pos (inverse edge) (edge)
-
-        edge4 =
-            Pos (edge) (inverse edge)
-    in
-        [ edge1, edge2, edge3, edge4 ]
-
-
 
 {-
    exampleTests : Test
