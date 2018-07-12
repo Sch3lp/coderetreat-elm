@@ -186,20 +186,56 @@ suite =
         ]
 
 
-mars : Test
+moon =
+    Planet "moon" 4
+
+
 mars =
+    Planet "mars" 16
+
+
+planet : Test
+planet =
     describe "Planet"
         [ describe "edges"
             [ test "moon has 4x4, so edges at (-1,-1) to (1,1)" <|
                 \_ ->
-                    edges (Planet "moon" 4)
+                    edges moon
                         |> Expect.equal [ Pos -1 -1, Pos 1 1, Pos -1 1, Pos 1 -1 ]
             , test "mars has 16x16, so edges at (-8,-8) to (8,8)" <|
                 \_ ->
-                    edges (Planet "moon" 16)
+                    edges mars
                         |> Expect.equal [ Pos -7 -7, Pos 7 7, Pos -7 7, Pos 7 -7 ]
             ]
+        , describe "moving out of bounds wraps to the other side"
+            [ test "at (-1,-1) moving west results in (1,-1)" <|
+                \_ ->
+                    moveX down { pos = (Pos -1 -1), planet = moon }
+                        |> Expect.equal { pos = (Pos 1 -1), planet = moon }
+            ]
         ]
+
+
+type alias PlanetPos =
+    { pos : Pos, planet : Planet }
+
+
+moveX dir planetPos =
+    let
+        currentPos =
+            planetPos.pos
+
+        newPos =
+            if isAnEdge planetPos then
+                { currentPos | x = (currentPos.x * -1) }
+            else
+                moveX dir currentPos
+    in
+        { planetPos | pos = newPos }
+
+
+isAnEdge planetPos =
+    List.any (\edge -> edge == planetPos.pos) (edges planetPos.planet)
 
 
 
