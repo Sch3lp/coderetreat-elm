@@ -220,13 +220,14 @@ type alias PlanetPos =
     { pos : Pos, planet : Planet }
 
 
+moveXAndWrap : AxisDirection -> PlanetPos -> PlanetPos
 moveXAndWrap dir planetPos =
     let
         currentPos =
             planetPos.pos
 
         newPos =
-            if isAnEdge planetPos then
+            if wouldMoveOutOfBounds dir planetPos then
                 { currentPos | x = (currentPos.x * -1) }
             else
                 moveX dir currentPos
@@ -234,8 +235,16 @@ moveXAndWrap dir planetPos =
         { planetPos | pos = newPos }
 
 
-isAnEdge planetPos =
-    List.any (\edge -> edge == planetPos.pos) (edges planetPos.planet)
+wouldMoveOutOfBounds : AxisDirection -> PlanetPos -> Bool
+wouldMoveOutOfBounds dir planetPos =
+    let
+        currentPos =
+            planetPos.pos
+
+        newPos =
+            moveX dir currentPos
+    in
+        List.any (\edgePos -> (abs newPos.x) > (abs edgePos.x)) (edges planetPos.planet)
 
 
 
