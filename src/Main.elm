@@ -8,14 +8,21 @@ type Command
     | Backward
 
 
-type alias Rover =
-    { direction : Direction
-    , position : Pos
-    }
+type Direction
+    = North
+    | East
+    | South
+    | West
 
 
 type alias Pos =
     { x : Int, y : Int }
+
+
+type alias Rover =
+    { direction : Direction
+    , position : Pos
+    }
 
 
 type alias Planet =
@@ -24,16 +31,13 @@ type alias Planet =
     }
 
 
-type Direction
-    = North
-    | East
-    | South
-    | West
-
-
 initialRover : Rover
 initialRover =
     Rover North <| Pos 0 0
+
+
+
+-- commands
 
 
 takeCommand : Command -> Rover -> Rover
@@ -57,28 +61,8 @@ takeCommands cmds rover =
     List.foldl takeCommand rover cmds
 
 
-edges : Planet -> List Pos
-edges p =
-    let
-        edge =
-            p.size // 2
 
-        inverse =
-            (\i -> i * -1)
-
-        edge1 =
-            Pos (inverse edge) (inverse edge)
-
-        edge2 =
-            Pos (edge) (edge)
-
-        edge3 =
-            Pos (inverse edge) (edge)
-
-        edge4 =
-            Pos (edge) (inverse edge)
-    in
-        [ edge1, edge2, edge3, edge4 ]
+-- moving
 
 
 moveForward : Rover -> Pos
@@ -129,6 +113,10 @@ moveX dir pos =
     { pos | x = pos.x + (dir 1) }
 
 
+
+-- turning
+
+
 turnLeft : Direction -> Direction
 turnLeft dir =
     case dir of
@@ -159,3 +147,31 @@ turnRight dir =
 
         West ->
             North
+
+
+
+-- planet edges
+
+
+edges : Planet -> List Pos
+edges p =
+    let
+        edge =
+            p.size // 2
+
+        inverse =
+            (\i -> i * -1)
+
+        edge1 =
+            Pos (inverse edge) (inverse edge)
+
+        edge2 =
+            Pos (edge) (edge)
+
+        edge3 =
+            Pos (inverse edge) (edge)
+
+        edge4 =
+            Pos (edge) (inverse edge)
+    in
+        [ edge1, edge2, edge3, edge4 ]
