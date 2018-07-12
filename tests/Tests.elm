@@ -212,6 +212,10 @@ planet =
                 \_ ->
                     moveXAndWrap down { pos = (Pos -1 -1), planet = moon }
                         |> Expect.equal { pos = (Pos 1 -1), planet = moon }
+            , test "at (1,1) moving east results in (-1,1)" <|
+                \_ ->
+                    moveXAndWrap up { pos = (Pos 1 1), planet = moon }
+                        |> Expect.equal { pos = (Pos -1 1), planet = moon }
             ]
         ]
 
@@ -244,7 +248,8 @@ wouldMoveOutOfBounds dir planetPos =
         newPos =
             moveX dir currentPos
     in
-        List.any (\edgePos -> (abs newPos.x) > (abs edgePos.x)) (edges planetPos.planet)
+        edges planetPos.planet
+            |> List.any (\edgePos -> (abs newPos.x) > (abs edgePos.x))
 
 
 
