@@ -186,6 +186,48 @@ suite =
         ]
 
 
+mars : Test
+mars =
+    describe "Planet"
+        [ describe "edges"
+            [ test "moon has 4x4, so edges at (-2,-2) to (2,2)" <|
+                \_ ->
+                    edges (Planet "moon" 4)
+                        |> Expect.equal [ Pos -2 -2, Pos 2 2, Pos -2 2, Pos 2 -2 ]
+            ]
+        ]
+
+
+type alias Planet =
+    { name : String
+    , size : Int
+    }
+
+
+edges : Planet -> List Pos
+edges p =
+    let
+        edge =
+            p.size // 2
+
+        inverse =
+            (\i -> i * -1)
+
+        edge1 =
+            Pos (inverse edge) (inverse edge)
+
+        edge2 =
+            Pos (edge) (edge)
+
+        edge3 =
+            Pos (inverse edge) (edge)
+
+        edge4 =
+            Pos (edge) (inverse edge)
+    in
+        [ edge1, edge2, edge3, edge4 ]
+
+
 
 {-
    exampleTests : Test
