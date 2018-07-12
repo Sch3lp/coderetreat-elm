@@ -21,7 +21,7 @@ type alias Pos =
 
 type alias Rover =
     { direction : Direction
-    , position : Pos
+    , position : PlanetPos
     }
 
 
@@ -37,7 +37,20 @@ type alias PlanetPos =
 
 initialRover : Rover
 initialRover =
-    Rover North <| Pos 0 0
+    Rover North <| PlanetPos (Pos 0 0) mars
+
+
+mars =
+    Planet "Mars" 16
+
+
+
+--helper
+
+
+positionedAt : Rover -> Pos
+positionedAt rover =
+    rover.position.pos
 
 
 
@@ -69,36 +82,36 @@ takeCommands cmds rover =
 -- moving
 
 
-moveForward : Rover -> Pos
+moveForward : Rover -> PlanetPos
 moveForward rover =
     case rover.direction of
         North ->
-            moveY up rover.position
+            moveYAndWrap up rover.position
 
         East ->
-            moveX up rover.position
+            moveXAndWrap up rover.position
 
         South ->
-            moveY down rover.position
+            moveYAndWrap down rover.position
 
         West ->
-            moveX down rover.position
+            moveXAndWrap down rover.position
 
 
-moveBackward : Rover -> Pos
+moveBackward : Rover -> PlanetPos
 moveBackward rover =
     case rover.direction of
         North ->
-            moveY down rover.position
+            moveYAndWrap down rover.position
 
         East ->
-            moveX down rover.position
+            moveXAndWrap down rover.position
 
         South ->
-            moveY up rover.position
+            moveYAndWrap up rover.position
 
         West ->
-            moveX up rover.position
+            moveXAndWrap up rover.position
 
 
 type alias AxisDirection =
