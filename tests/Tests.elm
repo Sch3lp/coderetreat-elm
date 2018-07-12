@@ -145,9 +145,9 @@ suite =
         ]
 
 
-marsPos : Int -> Int -> PlanetPos
-marsPos x y =
-    PlanetPos (Pos x y) mars
+marsPos : Pos -> PlanetPos
+marsPos pos =
+    PlanetPos pos mars
 
 
 moon =

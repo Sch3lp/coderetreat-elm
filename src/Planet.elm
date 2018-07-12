@@ -13,6 +13,12 @@ type alias PlanetPos =
     { pos : Pos, planet : Planet }
 
 
+type Obstacle
+    = Crater PlanetPos
+    | Debris PlanetPos
+    | Teleport PlanetPos PlanetPos
+
+
 moveXAndWrap : AxisDirection -> PlanetPos -> PlanetPos
 moveXAndWrap dir planetPos =
     let
