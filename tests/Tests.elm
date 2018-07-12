@@ -4,7 +4,9 @@ module Tests exposing (..)
 
 import Expect exposing (Expectation)
 import Test exposing (..)
-import Main exposing (..)
+import Rover exposing (..)
+import Position exposing (..)
+import Planet exposing (..)
 
 
 middleOfMars =
