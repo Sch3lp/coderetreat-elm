@@ -10,7 +10,7 @@ type alias Planet =
 
 
 type alias PlanetPos =
-    { pos : Pos, planet : Planet }
+    { planet : Planet, pos : Pos }
 
 
 type Obstacle

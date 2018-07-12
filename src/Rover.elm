@@ -26,9 +26,15 @@ type alias Rover =
 
 initialRover : Rover
 initialRover =
-    Rover North <| PlanetPos (Pos 0 0) mars
+    Rover North <| PlanetPos mars <| Pos 0 0
 
 
+marsPos : Pos -> PlanetPos
+marsPos pos =
+    PlanetPos mars pos
+
+
+mars : Planet
 mars =
     Planet "Mars" 16
 
