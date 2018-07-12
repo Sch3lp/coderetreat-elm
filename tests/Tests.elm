@@ -216,6 +216,14 @@ planet =
                 \_ ->
                     moveXAndWrap up { pos = (Pos 1 1), planet = moon }
                         |> Expect.equal { pos = (Pos -1 1), planet = moon }
+            , test "at (1,1) moving north results in (1,-1)" <|
+                \_ ->
+                    moveYAndWrap up { pos = (Pos 1 1), planet = moon }
+                        |> Expect.equal { pos = (Pos 1 -1), planet = moon }
+            , test "at (-1,-1) moving south results in (-1,1)" <|
+                \_ ->
+                    moveYAndWrap down { pos = (Pos -1 -1), planet = moon }
+                        |> Expect.equal { pos = (Pos -1 1), planet = moon }
             ]
         ]
 
@@ -230,26 +238,47 @@ moveXAndWrap dir planetPos =
         currentPos =
             planetPos.pos
 
+        moveInDir =
+            moveX dir
+
         newPos =
-            if wouldMoveOutOfBounds dir planetPos then
+            if wouldMoveOutOfBounds moveInDir planetPos then
                 { currentPos | x = (currentPos.x * -1) }
             else
-                moveX dir currentPos
+                moveInDir currentPos
     in
         { planetPos | pos = newPos }
 
 
-wouldMoveOutOfBounds : AxisDirection -> PlanetPos -> Bool
-wouldMoveOutOfBounds dir planetPos =
+moveYAndWrap : AxisDirection -> PlanetPos -> PlanetPos
+moveYAndWrap dir planetPos =
+    let
+        currentPos =
+            planetPos.pos
+
+        moveInDir =
+            moveY dir
+
+        newPos =
+            if wouldMoveOutOfBounds moveInDir planetPos then
+                { currentPos | y = (currentPos.y * -1) }
+            else
+                moveInDir currentPos
+    in
+        { planetPos | pos = newPos }
+
+
+wouldMoveOutOfBounds : (Pos -> Pos) -> PlanetPos -> Bool
+wouldMoveOutOfBounds moveDir planetPos =
     let
         currentPos =
             planetPos.pos
 
         newPos =
-            moveX dir currentPos
+            moveDir currentPos
     in
         edges planetPos.planet
-            |> List.any (\edgePos -> (abs newPos.x) > (abs edgePos.x))
+            |> List.any (\edgePos -> ((abs newPos.x) > (abs edgePos.x)) || ((abs newPos.y) > (abs edgePos.y)))
 
 
 
