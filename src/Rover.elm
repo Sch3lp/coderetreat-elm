@@ -20,13 +20,14 @@ type Direction
 
 type alias Rover =
     { direction : Direction
+    , message : Maybe String
     , position : PlanetPos
     }
 
 
 marsRover : Rover
 marsRover =
-    Rover North <| PlanetPos mars <| Pos 0 0
+    Rover North Nothing <| PlanetPos mars <| Pos 0 0
 
 
 marsPos : Pos -> PlanetPos
@@ -81,6 +82,11 @@ obstaclesOnMars =
 positionedAt : Rover -> Pos
 positionedAt rover =
     rover.position.pos
+
+
+getMessage : Rover -> Maybe String
+getMessage rover =
+    rover.message
 
 
 

@@ -82,36 +82,36 @@ rover =
                 , describe "facing east"
                     [ test "once, moves to (1,0)" <|
                         \_ ->
-                            takeCommands [ Forward ] (Rover East <| middleOfMars)
+                            takeCommands [ Forward ] { marsRover | direction = East }
                                 |> positionedAt
                                 |> Expect.equal (Pos 1 0)
                     , test "twice, moves to (2,0)" <|
                         \_ ->
-                            takeCommands [ Forward, Forward ] (Rover East <| middleOfMars)
+                            takeCommands [ Forward, Forward ] { marsRover | direction = East }
                                 |> positionedAt
                                 |> Expect.equal (Pos 2 0)
                     ]
                 , describe "facing south"
                     [ test "once, moves to (0,-1)" <|
                         \_ ->
-                            takeCommands [ Forward ] (Rover South <| middleOfMars)
+                            takeCommands [ Forward ] { marsRover | direction = South }
                                 |> positionedAt
                                 |> Expect.equal (Pos 0 -1)
                     , test "twice, moves to (0,-2)" <|
                         \_ ->
-                            takeCommands [ Forward, Forward ] (Rover South <| middleOfMars)
+                            takeCommands [ Forward, Forward ] { marsRover | direction = South }
                                 |> positionedAt
                                 |> Expect.equal (Pos 0 -2)
                     ]
                 , describe "facing west"
                     [ test "once, moves to (-1,0)" <|
                         \_ ->
-                            takeCommands [ Forward ] (Rover West <| middleOfMars)
+                            takeCommands [ Forward ] { marsRover | direction = West }
                                 |> positionedAt
                                 |> Expect.equal (Pos -1 0)
                     , test "twice, moves to (0,-2)" <|
                         \_ ->
-                            takeCommands [ Forward, Forward ] (Rover West <| middleOfMars)
+                            takeCommands [ Forward, Forward ] { marsRover | direction = West }
                                 |> positionedAt
                                 |> Expect.equal (Pos -2 0)
                     ]
@@ -132,15 +132,15 @@ rover =
                 [ test "left forward forward left forward" <|
                     \_ ->
                         takeCommands [ Left, Forward, Forward, Left, Forward ] marsRover
-                            |> Expect.equal (Rover South <| marsPos <| Pos -2 -1)
+                            |> Expect.equal { marsRover | direction = South, position = marsPos <| Pos -2 -1 }
                 , test "left forward backward right forward" <|
                     \_ ->
                         takeCommands [ Left, Forward, Backward, Right, Forward ] marsRover
-                            |> Expect.equal (Rover North <| marsPos <| Pos 0 1)
+                            |> Expect.equal { marsRover | direction = North, position = marsPos <| Pos 0 1 }
                 , test "commands that cause wrapping" <|
                     \_ ->
                         takeCommands [ Forward, Forward, Forward, Forward, Forward, Forward, Forward, Forward, Right, Forward, Forward, Forward, Forward, Forward, Forward, Forward, Forward ] marsRover
-                            |> Expect.equal (Rover East <| marsPos <| Pos -7 -7)
+                            |> Expect.equal { marsRover | direction = East, position = marsPos <| Pos -7 -7 }
                 ]
             ]
         ]
@@ -194,6 +194,20 @@ planet =
                         |> moveYAndWrap down
                         |> Expect.equal
                             (moonPos (Pos -1 1))
+            ]
+        ]
+
+
+obstacleTests : Test
+obstacleTests =
+    describe "Obstacles"
+        [ describe "on Mars"
+            [ test "debris on (0,1), so moving North should be impossible" <|
+                \_ ->
+                    takeCommands [ Forward ] marsRover
+                        |> getMessage
+                        |> Expect.equal
+                            (Just "I found debris North of me and cannot move in that direction.")
             ]
         ]
 
