@@ -190,14 +190,14 @@ mars : Test
 mars =
     describe "Planet"
         [ describe "edges"
-            [ test "moon has 4x4, so edges at (-2,-2) to (2,2)" <|
+            [ test "moon has 4x4, so edges at (-1,-1) to (1,1)" <|
                 \_ ->
                     edges (Planet "moon" 4)
-                        |> Expect.equal [ Pos -2 -2, Pos 2 2, Pos -2 2, Pos 2 -2 ]
+                        |> Expect.equal [ Pos -1 -1, Pos 1 1, Pos -1 1, Pos 1 -1 ]
             , test "mars has 16x16, so edges at (-8,-8) to (8,8)" <|
                 \_ ->
                     edges (Planet "moon" 16)
-                        |> Expect.equal [ Pos -8 -8, Pos 8 8, Pos -8 8, Pos 8 -8 ]
+                        |> Expect.equal [ Pos -7 -7, Pos 7 7, Pos -7 7, Pos 7 -7 ]
             ]
         ]
 

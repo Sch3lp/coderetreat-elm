@@ -157,7 +157,7 @@ edges : Planet -> List Pos
 edges p =
     let
         edge =
-            p.size // 2
+            (p.size // 2) - 1
 
         inverse =
             (\i -> i * -1)
