@@ -194,6 +194,10 @@ mars =
                 \_ ->
                     edges (Planet "moon" 4)
                         |> Expect.equal [ Pos -2 -2, Pos 2 2, Pos -2 2, Pos 2 -2 ]
+            , test "mars has 16x16, so edges at (-8,-8) to (8,8)" <|
+                \_ ->
+                    edges (Planet "moon" 16)
+                        |> Expect.equal [ Pos -8 -8, Pos 8 8, Pos -8 8, Pos 8 -8 ]
             ]
         ]
 
