@@ -136,8 +136,8 @@ suite =
                             |> Expect.equal (Rover North <| marsPos 0 1)
                 , test "commands that cause wrapping" <|
                     \_ ->
-                        takeCommands [ Forward, Forward, Forward, Forward, Forward, Forward, Forward, Forward ] initialRover
-                            |> Expect.equal (Rover North <| marsPos 0 -7)
+                        takeCommands [ Forward, Forward, Forward, Forward, Forward, Forward, Forward, Forward, Right, Forward, Forward, Forward, Forward, Forward, Forward, Forward, Forward ] initialRover
+                            |> Expect.equal (Rover East <| marsPos -7 -7)
                 ]
             ]
         ]
@@ -168,20 +168,28 @@ planet =
         , describe "moving out of bounds wraps to the other side"
             [ test "at (-1,-1) moving west results in (1,-1)" <|
                 \_ ->
-                    moveXAndWrap down { pos = (Pos -1 -1), planet = moon }
-                        |> Expect.equal { pos = (Pos 1 -1), planet = moon }
+                    PlanetPos (Pos -1 -1) moon
+                        |> moveXAndWrap down
+                        |> Expect.equal
+                            (PlanetPos (Pos 1 -1) moon)
             , test "at (1,1) moving east results in (-1,1)" <|
                 \_ ->
-                    moveXAndWrap up { pos = (Pos 1 1), planet = moon }
-                        |> Expect.equal { pos = (Pos -1 1), planet = moon }
+                    PlanetPos (Pos 1 1) moon
+                        |> moveXAndWrap up
+                        |> Expect.equal
+                            (PlanetPos (Pos -1 1) moon)
             , test "at (1,1) moving north results in (1,-1)" <|
                 \_ ->
-                    moveYAndWrap up { pos = (Pos 1 1), planet = moon }
-                        |> Expect.equal { pos = (Pos 1 -1), planet = moon }
+                    PlanetPos (Pos 1 1) moon
+                        |> moveYAndWrap up
+                        |> Expect.equal
+                            (PlanetPos (Pos 1 -1) moon)
             , test "at (-1,-1) moving south results in (-1,1)" <|
                 \_ ->
-                    moveYAndWrap down { pos = (Pos -1 -1), planet = moon }
-                        |> Expect.equal { pos = (Pos -1 1), planet = moon }
+                    PlanetPos (Pos -1 -1) moon
+                        |> moveYAndWrap down
+                        |> Expect.equal
+                            (PlanetPos (Pos -1 1) moon)
             ]
         ]
 
