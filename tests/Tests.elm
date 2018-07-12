@@ -134,6 +134,10 @@ suite =
                     \_ ->
                         takeCommands [ Left, Forward, Backward, Right, Forward ] initialRover
                             |> Expect.equal (Rover North <| marsPos 0 1)
+                , test "commands that cause wrapping" <|
+                    \_ ->
+                        takeCommands [ Forward, Forward, Forward, Forward, Forward, Forward, Forward, Forward ] initialRover
+                            |> Expect.equal (Rover North <| marsPos 0 -7)
                 ]
             ]
         ]
