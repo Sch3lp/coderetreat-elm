@@ -24,8 +24,8 @@ type alias Rover =
     }
 
 
-initialRover : Rover
-initialRover =
+marsRover : Rover
+marsRover =
     Rover North <| PlanetPos mars <| Pos 0 0
 
 
@@ -37,6 +37,41 @@ marsPos pos =
 mars : Planet
 mars =
     Planet "Mars" 16
+
+
+aiur : Planet
+aiur =
+    Planet "Aiur" 20
+
+
+aiurPos : Pos -> PlanetPos
+aiurPos pos =
+    PlanetPos aiur pos
+
+
+
+{- todo: obstacles' Planet and model's planet (or Rovers' planet for that matter), can be two different planets -}
+
+
+type alias Model =
+    { rover : Rover
+    , planet : Planet
+    , obstacles : List Obstacle
+    }
+
+
+initialModel : Model
+initialModel =
+    Model marsRover mars obstaclesOnMars
+
+
+obstaclesOnMars : List Obstacle
+obstaclesOnMars =
+    [ Crater <| marsPos <| Pos -1 0
+    , Crater <| marsPos <| Pos 6 -1
+    , Debris <| marsPos <| Pos 0 1
+    , Teleport (marsPos <| Pos 0 -7) (aiurPos <| Pos 0 0)
+    ]
 
 
 
