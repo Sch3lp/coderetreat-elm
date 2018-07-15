@@ -84,11 +84,6 @@ positionedAt rover =
     rover.position.pos
 
 
-getMessage : Rover -> Maybe String
-getMessage rover =
-    rover.message
-
-
 
 -- commands
 
@@ -112,6 +107,10 @@ takeCommand cmd rover =
 takeCommands : List Command -> Rover -> Rover
 takeCommands cmds rover =
     List.foldl takeCommand rover cmds
+
+
+
+-- scanning for obstacles
 
 
 scanForObstacles : List Obstacle -> Rover -> Rover
