@@ -92,16 +92,16 @@ takeCommand : Command -> Rover -> Rover
 takeCommand cmd rover =
     case cmd of
         Left ->
-            Debug.log "Left" <| { rover | direction = turnLeft rover.direction }
+            { rover | direction = turnLeft rover.direction }
 
         Right ->
-            Debug.log "Right" <| { rover | direction = turnRight rover.direction }
+            { rover | direction = turnRight rover.direction }
 
         Forward ->
-            Debug.log "Forward" <| (moveForward >> scanForObstacles obstaclesOnMars) rover
+            (moveForward >> scanForObstacles obstaclesOnMars) rover
 
         Backward ->
-            Debug.log "Backward" <| (moveBackward >> scanForObstacles obstaclesOnMars) rover
+            (moveBackward >> scanForObstacles obstaclesOnMars) rover
 
 
 takeCommands : List Command -> Rover -> Rover
@@ -110,6 +110,28 @@ takeCommands cmds rover =
 
 
 
+{- something like this maybe?
+   moveWhenNoObstacle : Rover -> MoveAction -> Maybe MoveAction
+   moveWhenNoObstacle rover moveAction =
+       let
+           wouldHitObstacle =
+               scanForObstacles obstaclesOnMars rover |> .message
+       in
+           case wouldHitObstacle of
+               Just _ ->
+                   Nothing
+
+               Nothing ->
+                   Just moveAction
+
+
+   type alias MoveCondition =
+       List Obstacle -> Rover -> Bool
+
+
+   type alias MoveAction =
+       Rover -> Rover
+-}
 -- scanning for obstacles
 
 
