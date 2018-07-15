@@ -68,10 +68,10 @@ initialModel =
 
 obstaclesOnMars : List Obstacle
 obstaclesOnMars =
-    [ Crater <| marsPos <| Pos -1 0
+    [ Crater <| marsPos <| Pos -3 0
     , Crater <| marsPos <| Pos 6 -1
-    , Debris <| marsPos <| Pos 0 1
-    , Teleport (marsPos <| Pos 0 -7) (aiurPos <| Pos 0 0)
+    , Debris <| marsPos <| Pos 0 2
+    , Teleport (marsPos <| Pos 0 7) (aiurPos <| Pos 0 0)
     ]
 
 
@@ -97,16 +97,16 @@ takeCommand : Command -> Rover -> Rover
 takeCommand cmd rover =
     case cmd of
         Left ->
-            { rover | direction = turnLeft rover.direction }
+            Debug.log "Left" <| { rover | direction = turnLeft rover.direction }
 
         Right ->
-            { rover | direction = turnRight rover.direction }
+            Debug.log "Right" <| { rover | direction = turnRight rover.direction }
 
         Forward ->
-            (moveForward >> scanForObstacles obstaclesOnMars) rover
+            Debug.log "Forward" <| (moveForward >> scanForObstacles obstaclesOnMars) rover
 
         Backward ->
-            moveBackward rover
+            Debug.log "Backward" <| (moveBackward >> scanForObstacles obstaclesOnMars) rover
 
 
 takeCommands : List Command -> Rover -> Rover

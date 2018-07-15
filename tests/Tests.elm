@@ -137,17 +137,18 @@ rover =
                     \_ ->
                         takeCommands [ Left, Forward, Backward, Right, Forward ] marsRover
                             |> Expect.equal { marsRover | direction = North, position = marsPos <| Pos 0 1 }
-                , test "commands that cause wrapping" <|
-                    \_ ->
-                        takeCommands [ Forward, Forward, Forward, Forward, Forward, Forward, Forward, Forward, Right, Forward, Forward, Forward, Forward, Forward, Forward, Forward, Forward ] marsRover
-                            |> Expect.equal { marsRover | direction = East, position = marsPos <| Pos -7 -7 }
+                , only <|
+                    test "commands that cause wrapping" <|
+                        \_ ->
+                            takeCommands [ Backward, Backward, Backward, Backward, Backward, Backward, Backward, Backward, Right, Forward, Forward, Forward, Forward, Forward, Forward, Forward, Forward ] marsRover
+                                |> Expect.equal { marsRover | direction = East, position = marsPos <| Pos -7 7 }
                 ]
             ]
         , describe "Obstacles"
             [ describe "on Mars"
-                [ test "debris on (0,1), so moving North should be impossible" <|
+                [ test "debris on (0,2), so moving North should be impossible" <|
                     \_ ->
-                        takeCommands [ Forward ] marsRover
+                        takeCommands [ Forward, Forward ] marsRover
                             |> getMessage
                             |> Expect.equal
                                 (Just "I found debris North of me and cannot move in that direction.")
