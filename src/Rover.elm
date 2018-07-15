@@ -103,7 +103,7 @@ takeCommand cmd rover =
             { rover | direction = turnRight rover.direction }
 
         Forward ->
-            moveForward rover
+            (moveForward >> scanForObstacles obstaclesOnMars) rover
 
         Backward ->
             moveBackward rover
@@ -112,6 +112,67 @@ takeCommand cmd rover =
 takeCommands : List Command -> Rover -> Rover
 takeCommands cmds rover =
     List.foldl takeCommand rover cmds
+
+
+scanForObstacles : List Obstacle -> Rover -> Rover
+scanForObstacles obstacles rover =
+    let
+        obstacleFound : Maybe String
+        obstacleFound =
+            List.filterMap (positionHasObstacle rover.position) obstacles
+                |> List.head
+    in
+        case obstacleFound of
+            Just msg ->
+                { rover | message = formatMsgWithDirection rover.direction msg }
+
+            Nothing ->
+                rover
+
+
+formatMsgWithDirection : Direction -> String -> Maybe String
+formatMsgWithDirection dir msg =
+    let
+        dirAsString =
+            case dir of
+                North ->
+                    "North"
+
+                East ->
+                    "East"
+
+                West ->
+                    "West"
+
+                South ->
+                    "South"
+
+        concatenatedMsg =
+            String.join " " [ msg, dirAsString, "of me and cannot move in that direction." ]
+    in
+        Just concatenatedMsg
+
+
+positionHasObstacle : PlanetPos -> Obstacle -> Maybe String
+positionHasObstacle pos obstacle =
+    case obstacle of
+        Crater obstaclePos ->
+            if obstaclePos == pos then
+                Just "I found a crater"
+            else
+                Nothing
+
+        Debris obstaclePos ->
+            if obstaclePos == pos then
+                Just "I found debris"
+            else
+                Nothing
+
+        Teleport obstaclePos warpPos ->
+            if obstaclePos == pos then
+                Just "I found a teleport"
+            else
+                Nothing
 
 
 
