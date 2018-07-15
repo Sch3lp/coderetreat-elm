@@ -103,10 +103,10 @@ takeCommand cmd rover =
             { rover | direction = turnRight rover.direction }
 
         Forward ->
-            { rover | position = moveForward rover }
+            moveForward rover
 
         Backward ->
-            { rover | position = moveBackward rover }
+            moveBackward rover
 
 
 takeCommands : List Command -> Rover -> Rover
@@ -118,36 +118,36 @@ takeCommands cmds rover =
 -- moving
 
 
-moveForward : Rover -> PlanetPos
+moveForward : Rover -> Rover
 moveForward rover =
     case rover.direction of
         North ->
-            moveYAndWrap up rover.position
+            { rover | position = moveYAndWrap up rover.position }
 
         East ->
-            moveXAndWrap up rover.position
+            { rover | position = moveXAndWrap up rover.position }
 
         South ->
-            moveYAndWrap down rover.position
+            { rover | position = moveYAndWrap down rover.position }
 
         West ->
-            moveXAndWrap down rover.position
+            { rover | position = moveXAndWrap down rover.position }
 
 
-moveBackward : Rover -> PlanetPos
+moveBackward : Rover -> Rover
 moveBackward rover =
     case rover.direction of
         North ->
-            moveYAndWrap down rover.position
+            { rover | position = moveYAndWrap down rover.position }
 
         East ->
-            moveXAndWrap down rover.position
+            { rover | position = moveXAndWrap down rover.position }
 
         South ->
-            moveYAndWrap up rover.position
+            { rover | position = moveYAndWrap up rover.position }
 
         West ->
-            moveXAndWrap up rover.position
+            { rover | position = moveXAndWrap up rover.position }
 
 
 
