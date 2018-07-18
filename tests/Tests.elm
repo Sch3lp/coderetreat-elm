@@ -127,15 +127,19 @@ rover =
                 [ test "left forward forward left forward" <|
                     \_ ->
                         takeCommands [ Left, Forward, Forward, Left, Forward ] marsRover
-                            |> Expect.equal { marsRover | aim = South, position = marsPos <| Pos -2 -1 }
+                            |> Expect.equal { marsRover | aim = South, heading = South, position = marsPos <| Pos -2 -1 }
                 , test "left forward backward right forward" <|
                     \_ ->
                         takeCommands [ Left, Forward, Backward, Right, Forward ] marsRover
-                            |> Expect.equal { marsRover | aim = North, position = marsPos <| Pos 0 1 }
+                            |> Expect.equal { marsRover | aim = North, heading = North, position = marsPos <| Pos 0 1 }
+                , test "command that ends in backward leaves rover facing opposite direction" <|
+                    \_ ->
+                        takeCommands [ Left, Forward, Right, Backward, Backward ] marsRover
+                            |> Expect.equal { marsRover | aim = North, heading = South, position = marsPos <| Pos -1 -2 }
                 , test "commands that cause wrapping" <|
                     \_ ->
                         takeCommands [ Backward, Backward, Backward, Backward, Backward, Backward, Backward, Backward, Right, Forward, Forward, Forward, Forward, Forward, Forward, Forward, Forward ] marsRover
-                            |> Expect.equal { marsRover | aim = East, position = marsPos <| Pos -7 7 }
+                            |> Expect.equal { marsRover | aim = East, heading = East, position = marsPos <| Pos -7 7 }
                 ]
             ]
         , describe "Obstacles"

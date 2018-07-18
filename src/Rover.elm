@@ -22,8 +22,25 @@ type alias Heading =
     Aim
 
 
+headingAsString : Heading -> String
+headingAsString heading =
+    case heading of
+        North ->
+            "North"
+
+        East ->
+            "East"
+
+        West ->
+            "West"
+
+        South ->
+            "South"
+
+
 type alias Rover =
     { aim : Aim
+    , heading : Heading
     , message : Maybe String
     , position : PlanetPos
     }
@@ -31,7 +48,7 @@ type alias Rover =
 
 marsRover : Rover
 marsRover =
-    Rover North Nothing <| marsPos <| Pos 0 0
+    Rover North North Nothing <| marsPos <| Pos 0 0
 
 
 marsPos : Pos -> PlanetPos
@@ -160,31 +177,17 @@ scanForObstacles obstacles rover =
     in
         case obstacleFound of
             Just msg ->
-                { rover | message = formatMsgWithDirection rover.aim msg }
+                { rover | message = formatMsgWithDirection rover.heading msg }
 
             Nothing ->
                 rover
 
 
-formatMsgWithDirection : Aim -> String -> Maybe String
-formatMsgWithDirection dir msg =
+formatMsgWithDirection : Heading -> String -> Maybe String
+formatMsgWithDirection heading msg =
     let
-        dirAsString =
-            case dir of
-                North ->
-                    "North"
-
-                East ->
-                    "East"
-
-                West ->
-                    "West"
-
-                South ->
-                    "South"
-
         concatenatedMsg =
-            String.join " " [ msg, dirAsString, "of me and cannot move in that direction." ]
+            String.join " " [ msg, headingAsString heading, "of me and cannot move in that direction." ]
     in
         Just concatenatedMsg
 
@@ -219,32 +222,32 @@ moveForward : MoveAction
 moveForward rover =
     case rover.aim of
         North ->
-            { rover | position = moveYAndWrap up rover.position }
+            { rover | position = moveYAndWrap up rover.position, heading = North }
 
         East ->
-            { rover | position = moveXAndWrap up rover.position }
+            { rover | position = moveXAndWrap up rover.position, heading = East }
 
         South ->
-            { rover | position = moveYAndWrap down rover.position }
+            { rover | position = moveYAndWrap down rover.position, heading = South }
 
         West ->
-            { rover | position = moveXAndWrap down rover.position }
+            { rover | position = moveXAndWrap down rover.position, heading = West }
 
 
 moveBackward : MoveAction
 moveBackward rover =
     case rover.aim of
         North ->
-            { rover | position = moveYAndWrap down rover.position }
+            { rover | position = moveYAndWrap down rover.position, heading = South }
 
         East ->
-            { rover | position = moveXAndWrap down rover.position }
+            { rover | position = moveXAndWrap down rover.position, heading = West }
 
         South ->
-            { rover | position = moveYAndWrap up rover.position }
+            { rover | position = moveYAndWrap up rover.position, heading = North }
 
         West ->
-            { rover | position = moveXAndWrap up rover.position }
+            { rover | position = moveXAndWrap up rover.position, heading = East }
 
 
 
