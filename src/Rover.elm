@@ -70,8 +70,8 @@ obstaclesOnMars : List Obstacle
 obstaclesOnMars =
     [ Crater <| marsPos <| Pos -3 0
     , Crater <| marsPos <| Pos 6 -1
-    , Debris <| marsPos <| Pos 0 2
-    , Teleport (marsPos <| Pos 0 7) (aiurPos <| Pos 0 0)
+    , Debris <| marsPos <| Pos 1 3
+    , Teleport (marsPos <| Pos 2 6) (aiurPos <| Pos 0 0)
     ]
 
 
@@ -109,28 +109,33 @@ takeCommands cmds rover =
     List.foldl takeCommand rover cmds
 
 
-move : Maybe MoveAction -> Rover -> Rover
-move moveAction rover =
-    case moveAction of
-        Just action ->
-            action rover
+move : CheckedMoveAction -> Rover -> Rover
+move checkedMoveAction rover =
+    case checkedMoveAction of
+        Unobstructed moveAction ->
+            moveAction rover
 
-        Nothing ->
-            rover
+        Obstructed msg ->
+            { rover | message = Just msg }
 
 
-moveConsideringObstacles : List Obstacle -> Rover -> MoveAction -> Maybe MoveAction
+moveConsideringObstacles : List Obstacle -> Rover -> MoveAction -> CheckedMoveAction
 moveConsideringObstacles obstacles rover moveAction =
     let
         wouldHitObstacle =
             scanForObstacles obstacles (moveAction rover) |> .message
     in
         case wouldHitObstacle of
-            Just _ ->
-                Nothing
+            Just msg ->
+                Obstructed msg
 
             Nothing ->
-                Just moveAction
+                Unobstructed moveAction
+
+
+type CheckedMoveAction
+    = Obstructed String
+    | Unobstructed MoveAction
 
 
 type alias MoveCondition =

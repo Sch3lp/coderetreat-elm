@@ -9,11 +9,6 @@ import Position exposing (..)
 import Planet exposing (..)
 
 
-middleOfMars : PlanetPos
-middleOfMars =
-    marsPos <| Pos 0 0
-
-
 rover : Test
 rover =
     describe "Rover"
@@ -145,30 +140,30 @@ rover =
             ]
         , describe "Obstacles"
             [ describe "on Mars"
-                [ test "debris on (0,2), so moving forwards North should return correct message" <|
+                [ test "debris on (1,3), so moving there should return correct message" <|
                     \_ ->
-                        takeCommands [ Forward, Forward ] marsRover
+                        takeCommands [ Right, Forward, Left, Forward, Forward, Forward ] marsRover
                             |> .message
                             |> Expect.equal
                                 (Just "I found debris North of me and cannot move in that direction.")
-                , test "debris on (0,2), so moving backwards North should return correct message" <|
+                , test "debris on (1,3), so moving backwards North should return correct message" <|
                     \_ ->
-                        takeCommands [ Right, Right, Backward, Backward ] marsRover
+                        takeCommands [ Right, Forward, Right, Backward, Backward, Backward ] marsRover
                             |> .message
                             |> Expect.equal
                                 (Just "I found debris North of me and cannot move in that direction.")
-                , test "debris on (0,2), so moving forwards North should be impossible" <|
+                , test "debris on (1,3), so moving there should be impossible" <|
                     \_ ->
-                        takeCommands [ Forward, Forward ] marsRover
+                        takeCommands [ Right, Forward, Left, Forward, Forward, Forward ] marsRover
                             |> .position
                             |> Expect.equal
-                                (marsPos <| Pos 0 1)
-                , test "debris on (0,2), so moving backwards North should be impossible" <|
+                                (marsPos <| Pos 1 2)
+                , test "debris on (1,3), so moving backwards North should be impossible" <|
                     \_ ->
-                        takeCommands [ Right, Right, Backward, Backward ] marsRover
+                        takeCommands [ Right, Forward, Right, Backward, Backward, Backward ] marsRover
                             |> .position
                             |> Expect.equal
-                                (marsPos <| Pos 0 1)
+                                (marsPos <| Pos 1 2)
                 ]
             ]
         ]
