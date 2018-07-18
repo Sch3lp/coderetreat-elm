@@ -72,19 +72,7 @@ aiurPos pos =
 
 
 
-{- todo: obstacles' Planet and model's planet (or Rovers' planet for that matter), can be two different planets -}
-
-
-type alias Model =
-    { rover : Rover
-    , planet : Planet
-    , obstacles : List Obstacle
-    }
-
-
-initialModel : Model
-initialModel =
-    Model marsRover mars obstaclesOnMars
+{- todo: obstacles' Planet and Rovers' planet, can be two different planets, but should not be possible -}
 
 
 obstaclesOnMars : List Obstacle
