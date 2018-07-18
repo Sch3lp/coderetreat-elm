@@ -157,13 +157,12 @@ rover =
                             |> .message
                             |> Expect.equal
                                 (Just "I found debris North of me and cannot move in that direction.")
-                , only <|
-                    test "debris on (0,2), so moving forwards North should be impossible" <|
-                        \_ ->
-                            takeCommands [ Forward, Forward ] marsRover
-                                |> .position
-                                |> Expect.equal
-                                    (marsPos <| Pos 0 1)
+                , test "debris on (0,2), so moving forwards North should be impossible" <|
+                    \_ ->
+                        takeCommands [ Forward, Forward ] marsRover
+                            |> .position
+                            |> Expect.equal
+                                (marsPos <| Pos 0 1)
                 , test "debris on (0,2), so moving backwards North should be impossible" <|
                     \_ ->
                         takeCommands [ Right, Right, Backward, Backward ] marsRover

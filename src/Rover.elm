@@ -27,7 +27,7 @@ type alias Rover =
 
 marsRover : Rover
 marsRover =
-    Rover North Nothing <| PlanetPos mars <| Pos 0 0
+    Rover North Nothing <| marsPos <| Pos 0 0
 
 
 marsPos : Pos -> PlanetPos
@@ -98,10 +98,10 @@ takeCommand cmd rover =
             { rover | direction = turnRight rover.direction }
 
         Forward ->
-            (moveForward >> scanForObstacles obstaclesOnMars) rover
+            move (moveConsideringObstacles obstaclesOnMars rover moveForward) rover
 
         Backward ->
-            (moveBackward >> scanForObstacles obstaclesOnMars) rover
+            move (moveConsideringObstacles obstaclesOnMars rover moveBackward) rover
 
 
 takeCommands : List Command -> Rover -> Rover
@@ -109,29 +109,39 @@ takeCommands cmds rover =
     List.foldl takeCommand rover cmds
 
 
+move : Maybe MoveAction -> Rover -> Rover
+move moveAction rover =
+    case moveAction of
+        Just action ->
+            action rover
 
-{- something like this maybe?
-   moveWhenNoObstacle : Rover -> MoveAction -> Maybe MoveAction
-   moveWhenNoObstacle rover moveAction =
-       let
-           wouldHitObstacle =
-               scanForObstacles obstaclesOnMars rover |> .message
-       in
-           case wouldHitObstacle of
-               Just _ ->
-                   Nothing
-
-               Nothing ->
-                   Just moveAction
+        Nothing ->
+            rover
 
 
-   type alias MoveCondition =
-       List Obstacle -> Rover -> Bool
+moveConsideringObstacles : List Obstacle -> Rover -> MoveAction -> Maybe MoveAction
+moveConsideringObstacles obstacles rover moveAction =
+    let
+        wouldHitObstacle =
+            scanForObstacles obstacles (moveAction rover) |> .message
+    in
+        case wouldHitObstacle of
+            Just _ ->
+                Nothing
+
+            Nothing ->
+                Just moveAction
 
 
-   type alias MoveAction =
-       Rover -> Rover
--}
+type alias MoveCondition =
+    List Obstacle -> Rover -> Bool
+
+
+type alias MoveAction =
+    Rover -> Rover
+
+
+
 -- scanning for obstacles
 
 
@@ -200,7 +210,7 @@ positionHasObstacle pos obstacle =
 -- moving
 
 
-moveForward : Rover -> Rover
+moveForward : MoveAction
 moveForward rover =
     case rover.direction of
         North ->
@@ -216,7 +226,7 @@ moveForward rover =
             { rover | position = moveXAndWrap down rover.position }
 
 
-moveBackward : Rover -> Rover
+moveBackward : MoveAction
 moveBackward rover =
     case rover.direction of
         North ->
