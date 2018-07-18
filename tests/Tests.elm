@@ -15,7 +15,7 @@ rover =
         [ describe "initial rover"
             [ test "faces north" <|
                 \_ ->
-                    marsRover.direction
+                    marsRover.aim
                         |> Expect.equal North
             , test "is positioned at (0,0)" <|
                 \_ ->
@@ -25,43 +25,43 @@ rover =
                 [ test "once, faces rover west without changing position" <|
                     \_ ->
                         takeCommands [ Left ] marsRover
-                            |> Expect.equal { marsRover | direction = West }
+                            |> Expect.equal { marsRover | aim = West }
                 , test "twice, faces rover south without changing position" <|
                     \_ ->
                         takeCommands [ Left, Left ] marsRover
-                            |> Expect.equal { marsRover | direction = South }
+                            |> Expect.equal { marsRover | aim = South }
                 , test "five times, faces rover west without changing position" <|
                     \_ ->
                         takeCommands [ Left, Left, Left, Left, Left ] marsRover
-                            |> Expect.equal { marsRover | direction = West }
+                            |> Expect.equal { marsRover | aim = West }
                 ]
             , describe "applying right"
                 [ test "once, faces rover east without changing position" <|
                     \_ ->
                         takeCommands [ Right ] marsRover
-                            |> Expect.equal { marsRover | direction = East }
+                            |> Expect.equal { marsRover | aim = East }
                 , test "twice, faces rover south without changing position" <|
                     \_ ->
                         takeCommands [ Right, Right ] marsRover
-                            |> Expect.equal { marsRover | direction = South }
+                            |> Expect.equal { marsRover | aim = South }
                 , test "five times, faces rover east without changing position" <|
                     \_ ->
                         takeCommands [ Right, Right, Right, Right, Right ] marsRover
-                            |> Expect.equal { marsRover | direction = East }
+                            |> Expect.equal { marsRover | aim = East }
                 ]
             , describe "applying right and left"
                 [ test "twice right, twice left, faces north again" <|
                     \_ ->
                         takeCommands [ Right, Right, Left, Left ] marsRover
-                            |> Expect.equal { marsRover | direction = North }
+                            |> Expect.equal { marsRover | aim = North }
                 , test "twice right, twice left alternating, faces north again" <|
                     \_ ->
                         takeCommands [ Right, Left, Right, Left ] marsRover
-                            |> Expect.equal { marsRover | direction = North }
+                            |> Expect.equal { marsRover | aim = North }
                 , test "right right right right left, faces west" <|
                     \_ ->
                         takeCommands [ Right, Right, Right, Right, Left ] marsRover
-                            |> Expect.equal { marsRover | direction = West }
+                            |> Expect.equal { marsRover | aim = West }
                 ]
             , describe "applying forward"
                 [ test "once, moves to (0,1)" <|
@@ -77,36 +77,36 @@ rover =
                 , describe "facing east"
                     [ test "once, moves to (1,0)" <|
                         \_ ->
-                            takeCommands [ Forward ] { marsRover | direction = East }
+                            takeCommands [ Forward ] { marsRover | aim = East }
                                 |> positionedAt
                                 |> Expect.equal (Pos 1 0)
                     , test "twice, moves to (2,0)" <|
                         \_ ->
-                            takeCommands [ Forward, Forward ] { marsRover | direction = East }
+                            takeCommands [ Forward, Forward ] { marsRover | aim = East }
                                 |> positionedAt
                                 |> Expect.equal (Pos 2 0)
                     ]
                 , describe "facing south"
                     [ test "once, moves to (0,-1)" <|
                         \_ ->
-                            takeCommands [ Forward ] { marsRover | direction = South }
+                            takeCommands [ Forward ] { marsRover | aim = South }
                                 |> positionedAt
                                 |> Expect.equal (Pos 0 -1)
                     , test "twice, moves to (0,-2)" <|
                         \_ ->
-                            takeCommands [ Forward, Forward ] { marsRover | direction = South }
+                            takeCommands [ Forward, Forward ] { marsRover | aim = South }
                                 |> positionedAt
                                 |> Expect.equal (Pos 0 -2)
                     ]
                 , describe "facing west"
                     [ test "once, moves to (-1,0)" <|
                         \_ ->
-                            takeCommands [ Forward ] { marsRover | direction = West }
+                            takeCommands [ Forward ] { marsRover | aim = West }
                                 |> positionedAt
                                 |> Expect.equal (Pos -1 0)
                     , test "twice, moves to (0,-2)" <|
                         \_ ->
-                            takeCommands [ Forward, Forward ] { marsRover | direction = West }
+                            takeCommands [ Forward, Forward ] { marsRover | aim = West }
                                 |> positionedAt
                                 |> Expect.equal (Pos -2 0)
                     ]
@@ -127,15 +127,15 @@ rover =
                 [ test "left forward forward left forward" <|
                     \_ ->
                         takeCommands [ Left, Forward, Forward, Left, Forward ] marsRover
-                            |> Expect.equal { marsRover | direction = South, position = marsPos <| Pos -2 -1 }
+                            |> Expect.equal { marsRover | aim = South, position = marsPos <| Pos -2 -1 }
                 , test "left forward backward right forward" <|
                     \_ ->
                         takeCommands [ Left, Forward, Backward, Right, Forward ] marsRover
-                            |> Expect.equal { marsRover | direction = North, position = marsPos <| Pos 0 1 }
+                            |> Expect.equal { marsRover | aim = North, position = marsPos <| Pos 0 1 }
                 , test "commands that cause wrapping" <|
                     \_ ->
                         takeCommands [ Backward, Backward, Backward, Backward, Backward, Backward, Backward, Backward, Right, Forward, Forward, Forward, Forward, Forward, Forward, Forward, Forward ] marsRover
-                            |> Expect.equal { marsRover | direction = East, position = marsPos <| Pos -7 7 }
+                            |> Expect.equal { marsRover | aim = East, position = marsPos <| Pos -7 7 }
                 ]
             ]
         , describe "Obstacles"

@@ -11,15 +11,19 @@ type Command
     | Backward
 
 
-type Direction
+type Aim
     = North
     | East
     | South
     | West
 
 
+type alias Heading =
+    Aim
+
+
 type alias Rover =
-    { direction : Direction
+    { aim : Aim
     , message : Maybe String
     , position : PlanetPos
     }
@@ -92,10 +96,10 @@ takeCommand : Command -> Rover -> Rover
 takeCommand cmd rover =
     case cmd of
         Left ->
-            { rover | direction = turnLeft rover.direction }
+            { rover | aim = turnLeft rover.aim }
 
         Right ->
-            { rover | direction = turnRight rover.direction }
+            { rover | aim = turnRight rover.aim }
 
         Forward ->
             move (moveConsideringObstacles obstaclesOnMars rover moveForward) rover
@@ -138,10 +142,6 @@ type CheckedMoveAction
     | Unobstructed MoveAction
 
 
-type alias MoveCondition =
-    List Obstacle -> Rover -> Bool
-
-
 type alias MoveAction =
     Rover -> Rover
 
@@ -160,13 +160,13 @@ scanForObstacles obstacles rover =
     in
         case obstacleFound of
             Just msg ->
-                { rover | message = formatMsgWithDirection rover.direction msg }
+                { rover | message = formatMsgWithDirection rover.aim msg }
 
             Nothing ->
                 rover
 
 
-formatMsgWithDirection : Direction -> String -> Maybe String
+formatMsgWithDirection : Aim -> String -> Maybe String
 formatMsgWithDirection dir msg =
     let
         dirAsString =
@@ -217,7 +217,7 @@ positionHasObstacle pos obstacle =
 
 moveForward : MoveAction
 moveForward rover =
-    case rover.direction of
+    case rover.aim of
         North ->
             { rover | position = moveYAndWrap up rover.position }
 
@@ -233,7 +233,7 @@ moveForward rover =
 
 moveBackward : MoveAction
 moveBackward rover =
-    case rover.direction of
+    case rover.aim of
         North ->
             { rover | position = moveYAndWrap down rover.position }
 
@@ -251,7 +251,7 @@ moveBackward rover =
 -- turning
 
 
-turnLeft : Direction -> Direction
+turnLeft : Aim -> Aim
 turnLeft dir =
     case dir of
         North ->
@@ -267,7 +267,7 @@ turnLeft dir =
             North
 
 
-turnRight : Direction -> Direction
+turnRight : Aim -> Aim
 turnRight dir =
     case dir of
         North ->
