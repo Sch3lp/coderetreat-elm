@@ -7,35 +7,175 @@ import Main exposing (..)
 import Test exposing (..)
 
 
+eastFacingRover =
+    Rover ( 0, 0 ) (Facing East)
+
+
+southFacingRover =
+    Rover ( 0, 0 ) (Facing South)
+
+
+westFacingRover =
+    Rover ( 0, 0 ) (Facing West)
+
+
 suite : Test
 suite =
     describe "Main"
-        [ describe "reading properties of a record"
-            [ test "string" <|
+        [ describe "A default Rover"
+            [ test "starts at 0,0" <|
                 \_ ->
-                    Expect.equal initialModel.text "Hello"
-            , test "Union Type" <|
+                    defaultRover
+                        |> .position
+                        |> Expect.equal ( 0, 0 )
+            , test "faces North" <|
                 \_ ->
-                    Expect.equal initialModel.place World
+                    defaultRover
+                        |> .facing
+                        |> Expect.equal (Facing North)
             ]
-        , describe "union type in action"
-            [ test "world" <|
-                \_ ->
-                    let
-                        world =
-                            Model "Hello" World
-                    in
-                    greet world
-                        |> Expect.equal "Hello World"
-            , test "elm" <|
-                \_ ->
-                    let
-                        elm =
-                            Model "Snarf Snarf" Elm
-                    in
-                    greet elm
-                        |> Expect.equal "Snarf Snarf Elm"
+        , describe "A Rover facing North"
+            [ describe "Move Forwards command"
+                [ test "moves up on y axis" <|
+                    \_ ->
+                        receiveCommand (Move Forwards) defaultRover
+                            |> Expect.equal (Rover ( 0, 1 ) (Facing North))
+                , test "twice moves up on y axis twice" <|
+                    \_ ->
+                        receiveCommands [ Move Forwards, Move Forwards ] defaultRover
+                            |> Expect.equal (Rover ( 0, 2 ) (Facing North))
+                ]
+            , describe "Move Backwards command"
+                [ test "moves down on y axis" <|
+                    \_ ->
+                        receiveCommand (Move Backwards) defaultRover
+                            |> Expect.equal (Rover ( 0, -1 ) (Facing North))
+                , test "twice moves down on y axis twice" <|
+                    \_ ->
+                        receiveCommands [ Move Backwards, Move Backwards ] defaultRover
+                            |> Expect.equal (Rover ( 0, -2 ) (Facing North))
+                ]
+            , describe "Rotate Right command"
+                [ test "faces East" <|
+                    \_ ->
+                        receiveCommand (Rotate Right) defaultRover
+                            |> Expect.equal (Rover ( 0, 0 ) (Facing East))
+                , test "two times faces South" <|
+                    \_ ->
+                        receiveCommands [ Rotate Right, Rotate Right ] defaultRover
+                            |> Expect.equal (Rover ( 0, 0 ) (Facing South))
+                , test "three times faces West" <|
+                    \_ ->
+                        receiveCommands [ Rotate Right, Rotate Right, Rotate Right ] defaultRover
+                            |> Expect.equal (Rover ( 0, 0 ) (Facing West))
+                , test "four times faces back North" <|
+                    \_ ->
+                        receiveCommands [ Rotate Right, Rotate Right, Rotate Right, Rotate Right ] defaultRover
+                            |> Expect.equal (Rover ( 0, 0 ) (Facing North))
+                ]
+            , describe "Rotate Left command"
+                [ test "faces West" <|
+                    \_ ->
+                        receiveCommand (Rotate Left) defaultRover
+                            |> Expect.equal (Rover ( 0, 0 ) (Facing West))
+                , test "two times faces South" <|
+                    \_ ->
+                        receiveCommands [ Rotate Left, Rotate Left ] defaultRover
+                            |> Expect.equal (Rover ( 0, 0 ) (Facing South))
+                , test "three times faces East" <|
+                    \_ ->
+                        receiveCommands [ Rotate Left, Rotate Left, Rotate Left ] defaultRover
+                            |> Expect.equal (Rover ( 0, 0 ) (Facing East))
+                , test "four times faces back North" <|
+                    \_ ->
+                        receiveCommands [ Rotate Left, Rotate Left, Rotate Left, Rotate Left ] defaultRover
+                            |> Expect.equal (Rover ( 0, 0 ) (Facing North))
+                ]
             ]
+        , describe "A Rover facing East"
+            [ describe "Move Forwards command"
+                [ test "moves up on x axis" <|
+                    \_ ->
+                        receiveCommand (Move Forwards) eastFacingRover
+                            |> Expect.equal (Rover ( 1, 0 ) (Facing East))
+                , test "twice moves up on x axis twice" <|
+                    \_ ->
+                        receiveCommands [ Move Forwards, Move Forwards ] eastFacingRover
+                            |> Expect.equal (Rover ( 2, 0 ) (Facing East))
+                ]
+            , describe "Move Backwards command"
+                [ test "moves down on x axis" <|
+                    \_ ->
+                        receiveCommand (Move Backwards) eastFacingRover
+                            |> Expect.equal (Rover ( -1, 0 ) (Facing East))
+                , test "twice moves down on x axis twice" <|
+                    \_ ->
+                        receiveCommands [ Move Backwards, Move Backwards ] eastFacingRover
+                            |> Expect.equal (Rover ( -2, 0 ) (Facing East))
+                ]
+            ]
+        , describe "A Rover facing South"
+            [ describe "Move Forwards command"
+                [ test "moves down on y axis" <|
+                    \_ ->
+                        receiveCommand (Move Forwards) southFacingRover
+                            |> Expect.equal (Rover ( 0, -1 ) (Facing South))
+                , test "twice moves down on y axis twice" <|
+                    \_ ->
+                        receiveCommands [ Move Forwards, Move Forwards ] southFacingRover
+                            |> Expect.equal (Rover ( 0, -2 ) (Facing South))
+                ]
+            , describe "Move Backwards command"
+                [ test "moves down up y axis" <|
+                    \_ ->
+                        receiveCommand (Move Backwards) southFacingRover
+                            |> Expect.equal (Rover ( 0, 1 ) (Facing South))
+                , test "twice moves down up y axis twice" <|
+                    \_ ->
+                        receiveCommands [ Move Backwards, Move Backwards ] southFacingRover
+                            |> Expect.equal (Rover ( 0, 2 ) (Facing South))
+                ]
+            ]
+        , describe "A Rover facing West"
+            [ describe "Move Forwards command"
+                [ test "moves down on x axis" <|
+                    \_ ->
+                        receiveCommand (Move Forwards) westFacingRover
+                            |> Expect.equal (Rover ( -1, 0 ) (Facing West))
+                , test "twice moves down on x axis twice" <|
+                    \_ ->
+                        receiveCommands [ Move Forwards, Move Forwards ] westFacingRover
+                            |> Expect.equal (Rover ( -2, 0 ) (Facing West))
+                ]
+            , describe "Move Backwards command"
+                [ test "moves down up x axis" <|
+                    \_ ->
+                        receiveCommand (Move Backwards) westFacingRover
+                            |> Expect.equal (Rover ( 1, 0 ) (Facing West))
+                , test "twice moves down up x axis twice" <|
+                    \_ ->
+                        receiveCommands [ Move Backwards, Move Backwards ] westFacingRover
+                            |> Expect.equal (Rover ( 2, 0 ) (Facing West))
+                ]
+            ]
+        , test "A Rover adventures" <|
+            \_ ->
+                let
+                    cmds =
+                        [ Move Forwards
+                        , Rotate Right
+                        , Move Forwards
+                        , Rotate Right
+                        , Move Forwards
+                        , Move Forwards
+                        , Rotate Left
+                        , Move Backwards
+                        , Move Backwards
+                        , Move Backwards
+                        ]
+                in
+                receiveCommands cmds defaultRover
+                    |> Expect.equal (Rover ( -2, -1 ) (Facing East))
         ]
 
 
